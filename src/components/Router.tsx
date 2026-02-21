@@ -2,6 +2,7 @@ import { MemberProvider } from '@/integrations';
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
 import { ScrollToTop } from '@/lib/scroll-to-top';
 import ErrorPage from '@/integrations/errorHandlers/ErrorPage';
+import LoginPage from '@/components/pages/LoginPage';
 import HomePage from '@/components/pages/HomePage';
 import VehiclesPage from '@/components/pages/VehiclesPage';
 import VehicleDetailPage from '@/components/pages/VehicleDetailPage';
@@ -13,6 +14,22 @@ import MaintenancePage from '@/components/pages/MaintenancePage';
 import ExpensesPage from '@/components/pages/ExpensesPage';
 import AnalyticsPage from '@/components/pages/AnalyticsPage';
 import ContactPage from '@/components/pages/ContactPage';
+
+// Protected route component
+function ProtectedRoute() {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return (
+    <>
+      <ScrollToTop />
+      <Outlet />
+    </>
+  );
+}
 
 // Layout component that includes ScrollToTop
 function Layout() {
@@ -26,8 +43,13 @@ function Layout() {
 
 const router = createBrowserRouter([
   {
+    path: "/login",
+    element: <LoginPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
     path: "/",
-    element: <Layout />,
+    element: <ProtectedRoute />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -112,6 +134,10 @@ const router = createBrowserRouter([
         element: <Navigate to="/" replace />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <Navigate to="/login" replace />,
   },
 ], {
   basename: import.meta.env.BASE_NAME,

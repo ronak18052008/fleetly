@@ -1,10 +1,17 @@
-import { Link, useLocation } from 'react-router-dom';
-import { Truck, Menu, X } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Truck, Menu, X, LogOut } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userEmail');
+    navigate('/login');
+  };
 
   const navLinks = [
     { path: '/', label: 'Dashboard' },
@@ -51,6 +58,14 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
+            <button
+              onClick={handleLogout}
+              className="font-paragraph text-sm px-4 py-2 rounded text-secondary hover:text-foreground hover:bg-section-background transition-colors flex items-center gap-2"
+              title="Logout"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </button>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -81,6 +96,16 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleLogout();
+                }}
+                className="font-paragraph text-sm px-4 py-3 rounded text-secondary hover:text-foreground hover:bg-section-background transition-colors flex items-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </button>
             </div>
           </nav>
         )}
