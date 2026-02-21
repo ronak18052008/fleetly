@@ -1,40 +1,135 @@
+ 🚀 Features
 
-[Project Name]
-A brief, one-sentence description of what this project does (e.g., "A Python-based automation tool for tracking stock prices").
+- **Astro Framework** - Modern static site generator with server-side rendering
+- **React Integration** - Full React support with JSX components
+- **TypeScript** - Type-safe development experience
+- **Tailwind CSS** - Utility-first CSS framework with custom components
+- **Integration** - Seamless integration with services and APIs
+- **Modern UI Components** - Radix UI components with custom styling
+- **Authentication** - Built-in member authentication and protected routes
+- **CMS Integration** - Content management system integration
+- **Client-side Routing** - React Router for seamless navigation
+- **Responsive Design** - Mobile-first responsive design
+- **Testing** - Vitest testing framework setup
+- **Development Tools** - ESLint, TypeScript checking, and more
 
-🚀 Features
-Feature 1: Describe a core capability.
+## 🛠️ Tech Stack
 
-Feature 2: Highlight a unique selling point.
+- **Framework**: Astro 5.8.0
+- **Frontend**: React 18.3.0
+- **Styling**: Tailwind CSS 3.4.14
+- **Language**: TypeScript 5.8.3
+- **UI Components**: Radix UI
+- **State Management**: Zustand
+- **Forms**: React Hook Form with Zod validation
+- **Testing**: Vitest
+- **Build Tool**: Vite
+- **Deployment**: Cloudflare
 
-Feature 3: Mention user-friendly aspects or performance.
 
-🛠 Tech Stack
-Language: [e.g., Python, JavaScript, C++]
+## 🚀 Getting Started
 
-Frameworks/Libraries: [e.g., React, TensorFlow, Express]
+### Prerequisites
 
-Database: [e.g., MongoDB, PostgreSQL]
+- Node.js (version 18 or higher)
+- npm or yarn package manager
 
-📦 Installation
-To get this project running locally, follow these steps:
+### Installation
 
-Clone the repository:
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-Bash
-git clone https://github.com/your-username/your-repo-name.git
-Navigate to the directory:
+2. **Set up environment variables**:
+   ```bash
+   npm run env
+   ```
 
-Bash
-cd your-repo-name
-Install dependencies:
+3. **Start development server**:
+   ```bash
+   npm run dev
+   ```
 
-Bash
-npm install  # or pip install -r requirements.txt
-🖥 Usage
-Provide a quick example of how to run the project:
+The development server will start and you can view your site at `http://localhost:4321`.
 
-Bash
-npm start # or python main.py
-🤝 Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
+## 📁 Project Structure
+
+```
+main/
+├── src/
+│   ├── components/          # React components
+│   │   ├── ui/             # Reusable UI components
+│   │   ├── Head.tsx        # Page head component
+│   │   └── Router.tsx      # Routing component
+│   ├── hooks/              # Custom React hooks
+│   ├── lib/                # Utility functions
+│   ├── pages/              # Astro pages
+│   └── styles/             # Global styles
+├── integrations/           # integrations
+│   ├── cms/               # CMS integration
+│   └── members/           # Member authentication
+├── public/                # Static assets
+└── eslint-rules/          # Custom ESLint rules
+```
+
+## 🎨 UI Components
+
+This template includes a comprehensive set of UI components built with Radix UI and styled with Tailwind CSS:
+
+- **Layout**: Accordion, Collapsible, Tabs, Sheet
+- **Forms**: Input, Select, Checkbox, Radio Group, Switch
+- **Navigation**: Navigation Menu, Menubar, Breadcrumb
+- **Feedback**: Alert, Toast, Progress, Skeleton
+- **Overlays**: Dialog, Popover, Tooltip, Hover Card
+- **Data Display**: Table, Card, Badge, Avatar
+- **Interactive**: Button, Toggle, Slider, Command
+
+## 🔧 Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run release` - Release 
+- `npm run env` - Pull environment variables
+- `npm run check` - Type check with Astro
+- `npm run test:run` - Run tests
+- `npm install` - Install dependencies
+
+## 🧪 Testing
+
+The project includes Vitest for testing:
+
+```bash
+npm run test:run
+```
+
+## 📱 Responsive Design
+
+The template is built with a mobile-first approach and includes:
+
+- Responsive breakpoints
+- Touch-friendly interactions
+- Optimized images
+- Flexible layouts
+
+## 🚀 Deployment
+
+The template is configured for deployment on Cloudflare:
+
+```bash
+npm run build
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests and linting
+5. Submit a pull request
+
+
+---
+
+Built with ❤️ using Vibe, Astro, and modern web technologies.
