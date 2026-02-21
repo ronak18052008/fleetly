@@ -14,11 +14,28 @@ import MaintenancePage from '@/components/pages/MaintenancePage';
 import ExpensesPage from '@/components/pages/ExpensesPage';
 import AnalyticsPage from '@/components/pages/AnalyticsPage';
 import ContactPage from '@/components/pages/ContactPage';
+import { useEffect, useState } from 'react';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 // Protected route component
 function ProtectedRoute() {
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    // Check login state from localStorage
+    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    setIsLoggedIn(loggedIn);
+  }, []);
+
+  // Show loading spinner while checking auth state
+  if (isLoggedIn === null) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
