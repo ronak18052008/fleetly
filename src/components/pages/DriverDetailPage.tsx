@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { BaseCrudService } from '@/integrations';
 import { Drivers, Trips } from '@/entities';
-import { ArrowLeft, User, Mail, Phone, Calendar, Award, TrendingUp } from 'lucide-react';
+import { ArrowLeft, User, Mail, Phone, Calendar, Award, TrendingUp, MapPin, Truck, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -222,46 +222,75 @@ export default function DriverDetailPage() {
               <div className="max-w-[100rem] mx-auto px-6 py-12">
                 <h2 className="font-heading text-2xl text-foreground mb-6">Trip History</h2>
                 {trips.length > 0 ? (
-                  <div className="bg-background rounded shadow-sm border border-section-background overflow-hidden">
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
-                        <thead className="bg-section-background">
-                          <tr>
-                            <th className="px-6 py-4 text-left font-heading text-sm font-bold text-foreground">Trip Name</th>
-                            <th className="px-6 py-4 text-left font-heading text-sm font-bold text-foreground">Departure</th>
-                            <th className="px-6 py-4 text-left font-heading text-sm font-bold text-foreground">Destination</th>
-                            <th className="px-6 py-4 text-left font-heading text-sm font-bold text-foreground">Cargo Weight</th>
-                            <th className="px-6 py-4 text-left font-heading text-sm font-bold text-foreground">Status</th>
-                            <th className="px-6 py-4 text-left font-heading text-sm font-bold text-foreground">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {trips.map((trip, index) => (
-                            <motion.tr
-                              key={trip._id}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ duration: 0.3, delay: index * 0.05 }}
-                              className="border-t border-section-background hover:bg-section-background/50 transition-colors"
-                            >
-                              <td className="px-6 py-4 font-paragraph text-sm text-foreground">{trip.tripName}</td>
-                              <td className="px-6 py-4 font-paragraph text-sm text-secondary">{trip.departureLocation}</td>
-                              <td className="px-6 py-4 font-paragraph text-sm text-secondary">{trip.destinationLocation}</td>
-                              <td className="px-6 py-4 font-paragraph text-sm text-secondary">{trip.cargoWeightKg?.toLocaleString()} kg</td>
-                              <td className="px-6 py-4">
-                                <span className={`inline-block px-3 py-1 rounded text-xs font-medium ${getTripStatusColor(trip.tripStatus)}`}>
-                                  {trip.tripStatus}
-                                </span>
-                              </td>
-                              <td className="px-6 py-4">
-                                <Link to={`/trips/${trip._id}`} className="font-paragraph text-sm text-primary hover:underline">
-                                  View Details
-                                </Link>
-                              </td>
-                            </motion.tr>
-                          ))}
-                        </tbody>
-                      </table>
+                  <div className="space-y-4">
+                    {/* Active Trip Highlight */}
+                    {trips.find(t => t.tripStatus === 'In Progress' || t.tripStatus === 'Dispatched') && (
+                      <div className="bg-status-on-trip/10 border-2 border-status-on-trip rounded-lg p-6 mb-6">
+                        <div className="flex items-start gap-4">
+                          <div className="bg-status-on-trip/20 p-3 rounded-lg">
+                            <Truck className="w-6 h-6 text-status-on-trip" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="font-heading text-lg text-status-on-trip font-bold mb-2">Currently Active Trip</h3>
+                            {trips.find(t => t.tripStatus === 'In Progress' || t.tripStatus === 'Dispatched') && (
+                              <div className="space-y-2">
+                                <p className="font-heading text-base text-foreground">{trips.find(t => t.tripStatus === 'In Progress' || t.tripStatus === 'Dispatched')?.tripName}</p>
+                                <div className="flex items-center gap-2 text-sm font-paragraph text-secondary">
+                                  <MapPin className="w-4 h-4" />
+                                  <span>{trips.find(t => t.tripStatus === 'In Progress' || t.tripStatus === 'Dispatched')?.departureLocation} → {trips.find(t => t.tripStatus === 'In Progress' || t.tripStatus === 'Dispatched')?.destinationLocation}</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm font-paragraph text-secondary">
+                                  <Clock className="w-4 h-4" />
+                                  <span>Cargo: {trips.find(t => t.tripStatus === 'In Progress' || t.tripStatus === 'Dispatched')?.cargoWeightKg?.toLocaleString()} kg</span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="bg-background rounded shadow-sm border border-section-background overflow-hidden">
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="bg-section-background">
+                            <tr>
+                              <th className="px-6 py-4 text-left font-heading text-sm font-bold text-foreground">Trip Name</th>
+                              <th className="px-6 py-4 text-left font-heading text-sm font-bold text-foreground">Departure</th>
+                              <th className="px-6 py-4 text-left font-heading text-sm font-bold text-foreground">Destination</th>
+                              <th className="px-6 py-4 text-left font-heading text-sm font-bold text-foreground">Cargo Weight</th>
+                              <th className="px-6 py-4 text-left font-heading text-sm font-bold text-foreground">Status</th>
+                              <th className="px-6 py-4 text-left font-heading text-sm font-bold text-foreground">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {trips.map((trip, index) => (
+                              <motion.tr
+                                key={trip._id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: index * 0.05 }}
+                                className="border-t border-section-background hover:bg-section-background/50 transition-colors"
+                              >
+                                <td className="px-6 py-4 font-paragraph text-sm text-foreground">{trip.tripName}</td>
+                                <td className="px-6 py-4 font-paragraph text-sm text-secondary">{trip.departureLocation}</td>
+                                <td className="px-6 py-4 font-paragraph text-sm text-secondary">{trip.destinationLocation}</td>
+                                <td className="px-6 py-4 font-paragraph text-sm text-secondary">{trip.cargoWeightKg?.toLocaleString()} kg</td>
+                                <td className="px-6 py-4">
+                                  <span className={`inline-block px-3 py-1 rounded text-xs font-medium ${getTripStatusColor(trip.tripStatus)}`}>
+                                    {trip.tripStatus}
+                                  </span>
+                                </td>
+                                <td className="px-6 py-4">
+                                  <Link to={`/trips/${trip._id}`} className="font-paragraph text-sm text-primary hover:underline">
+                                    View Details
+                                  </Link>
+                                </td>
+                              </motion.tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 ) : (

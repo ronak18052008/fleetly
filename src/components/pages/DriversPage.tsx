@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BaseCrudService } from '@/integrations';
-import { Drivers } from '@/entities';
-import { User, Search } from 'lucide-react';
+import { Drivers, Trips } from '@/entities';
+import { User, Search, MapPin, Truck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -12,29 +12,43 @@ import { Image } from '@/components/ui/image';
 
 export default function DriversPage() {
   const [drivers, setDrivers] = useState<Drivers[]>([]);
+  const [trips, setTrips] = useState<Trips[]>([]);
   const [filteredDrivers, setFilteredDrivers] = useState<Drivers[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
   useEffect(() => {
-    loadDrivers();
+    loadData();
   }, []);
 
   useEffect(() => {
     applyFilters();
   }, [drivers, searchQuery, statusFilter]);
 
-  const loadDrivers = async () => {
+  const loadData = async () => {
     setIsLoading(true);
     try {
-      const result = await BaseCrudService.getAll<Drivers>('drivers');
-      setDrivers(result.items);
+      const [driversResult, tripsResult] = await Promise.all([
+        BaseCrudService.getAll<Drivers>('drivers'),
+        BaseCrudService.getAll<Trips>('trips')
+      ]);
+      setDrivers(driversResult.items);
+      setTrips(tripsResult.items);
     } catch (error) {
-      console.error('Error loading drivers:', error);
+      console.error('Error loading data:', error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const getDriverTrips = (driverId: string) => {
+    return trips.filter(t => t.assignedDriverId === driverId);
+  };
+
+  const getActiveTrip = (driverId: string) => {
+    const driverTrips = getDriverTrips(driverId);
+    return driverTrips.find(t => t.tripStatus === 'In Progress' || t.tripStatus === 'Dispatched');
   };
 
   const applyFilters = () => {
@@ -182,7 +196,28 @@ export default function DriversPage() {
                           <span className="font-paragraph text-sm text-secondary">Completion Rate</span>
                           <span className="font-heading text-sm font-bold text-foreground">{driver.tripCompletionRate}%</span>
                         </div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-paragraph text-sm text-secondary">Total Trips</span>
+                          <span className="font-heading text-sm font-bold text-foreground">{getDriverTrips(driver._id).length}</span>
+                        </div>
                       </div>
+
+                      {/* Active Trip Info */}
+                      {getActiveTrip(driver._id) && (
+                        <div className="bg-status-on-trip/10 border border-status-on-trip/30 rounded p-3 mb-4">
+                          <div className="flex items-start gap-2 mb-2">
+                            <Truck className="w-4 h-4 text-status-on-trip flex-shrink-0 mt-0.5" />
+                            <div className="flex-1 min-w-0">
+                              <p className="font-heading text-xs text-status-on-trip font-bold">Active Trip</p>
+                              <p className="font-paragraph text-xs text-foreground truncate">{getActiveTrip(driver._id)?.tripName}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1 text-xs text-secondary font-paragraph">
+                            <MapPin className="w-3 h-3" />
+                            <span className="truncate">{getActiveTrip(driver._id)?.departureLocation} → {getActiveTrip(driver._id)?.destinationLocation}</span>
+                          </div>
+                        </div>
+                      )}
 
                       <div className="flex items-center gap-2 mb-4">
                         <span className={`inline-block px-3 py-1 rounded text-xs font-medium ${getStatusColor(driver.dutyStatus)}`}>
