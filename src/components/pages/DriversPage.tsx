@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BaseCrudService } from '@/integrations';
 import { Drivers, Trips } from '@/entities';
-import { User, Search, MapPin, Truck } from 'lucide-react';
+import { User, Search, MapPin, Truck, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
 import { Image } from '@/components/ui/image';
+import DriverRegistrationModal from '@/components/DriverRegistrationModal';
 
 export default function DriversPage() {
   const [drivers, setDrivers] = useState<Drivers[]>([]);
@@ -17,6 +19,7 @@ export default function DriversPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -100,6 +103,12 @@ export default function DriversPage() {
     <div className="min-h-screen bg-background">
       <Header />
       
+      <DriverRegistrationModal
+        isOpen={isRegistrationModalOpen}
+        onClose={() => setIsRegistrationModalOpen(false)}
+        onSuccess={loadData}
+      />
+      
       <main className="w-full">
         {/* Header Section */}
         <section className="w-full bg-section-background">
@@ -115,6 +124,13 @@ export default function DriversPage() {
                 <span className="font-paragraph text-sm text-secondary">
                   {filteredDrivers.length} of {drivers.length} drivers
                 </span>
+                <Button
+                  onClick={() => setIsRegistrationModalOpen(true)}
+                  className="flex items-center gap-2 font-paragraph text-sm"
+                >
+                  <Plus className="w-4 h-4" />
+                  New Driver
+                </Button>
               </div>
             </div>
           </div>

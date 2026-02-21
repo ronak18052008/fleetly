@@ -9,6 +9,7 @@ import Footer from '@/components/Footer';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
+import VehicleRegistrationModal from '@/components/VehicleRegistrationModal';
 
 export default function VehiclesPage() {
   const [vehicles, setVehicles] = useState<Vehicles[]>([]);
@@ -17,6 +18,7 @@ export default function VehiclesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
+  const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
 
   useEffect(() => {
     loadVehicles();
@@ -82,6 +84,12 @@ export default function VehiclesPage() {
     <div className="min-h-screen bg-background">
       <Header />
       
+      <VehicleRegistrationModal
+        isOpen={isRegistrationModalOpen}
+        onClose={() => setIsRegistrationModalOpen(false)}
+        onSuccess={loadVehicles}
+      />
+      
       <main className="w-full">
         {/* Header Section */}
         <section className="w-full bg-section-background">
@@ -97,6 +105,13 @@ export default function VehiclesPage() {
                 <span className="font-paragraph text-sm text-secondary">
                   {filteredVehicles.length} of {vehicles.length} vehicles
                 </span>
+                <Button
+                  onClick={() => setIsRegistrationModalOpen(true)}
+                  className="flex items-center gap-2 font-paragraph text-sm"
+                >
+                  <Plus className="w-4 h-4" />
+                  New Vehicle
+                </Button>
               </div>
             </div>
           </div>
